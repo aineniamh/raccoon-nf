@@ -1,9 +1,10 @@
 #!/usr/bin/env nextflow
 
 include { seqQC; mafftAlign; alnQC } from './modules/SequenceQC.nf'
-include { maskAln } from './modules/MaskingAndTreeQC.nf'
+include { maskAln; iqtree; treePrune } from './modules/MaskingAndTreeQC.nf'
 
 workflow seq_qc {
+    main:
     // Define the input channels
     inFasta_ch = Channel.fromPath("${params.fasta}")
     inMetadata_ch = Channel.fromPath("${params.metadata}")
@@ -28,8 +29,9 @@ workflow mask_and_tree_qc {
     mask_in
 
     main:
-    maskAln(aln_in,mask_in)
-    
+    maskAln_output = maskAln(aln_in,mask_in)
+    iqtree_output = iqtree(maskAln_output)
+    treePrune(iqtree_output)
 
 }
 
