@@ -25,7 +25,7 @@ process mafftAlign {
     tuple val(input_ID), path(qc_fasta)
 
     output:
-    tuple val(input_ID), path("*.aln.fasta")
+    tuple val(input_ID), path("*.aln.fasta"), emit: aln
 
     script:
     """
@@ -41,7 +41,7 @@ process alnQC {
     tuple val(input_ID), path(aln_fasta)
     
     output:
-    tuple val(input_ID), path("mask_sites.csv")
+    tuple val(input_ID), path("mask_sites.csv"), emit: mask
 
     script:
     """
