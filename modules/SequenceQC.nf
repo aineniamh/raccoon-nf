@@ -1,6 +1,6 @@
 process seqQC {
     conda "${HOME}/miniconda3/envs/raccoon"
-    publishDir "results/${input_fasta.baseName}/seq-qc/", pattern: "*.seq_qc.fasta"
+    publishDir "results/${input_fasta.baseName}/seq-qc/"
 
     input:
     path input_fasta
@@ -9,7 +9,8 @@ process seqQC {
     val max_n
 
     output:
-    tuple val(input_fasta.baseName), path("*.seq_qc.fasta")
+    tuple val(input_fasta.baseName), path("*.seq_qc.fasta"), emit: seq_qc_fasta
+    path "*"
 
     script:
     """
@@ -42,6 +43,7 @@ process alnQC {
     
     output:
     tuple val(input_ID), path("mask_sites.csv"), emit: mask
+    path "*"
 
     script:
     """

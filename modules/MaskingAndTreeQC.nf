@@ -19,7 +19,8 @@ process maskAln {
     tuple val(input_ID), path(mask_file)
 
     output:
-    tuple val(input_ID), path("*.aln.masked.fasta")
+    tuple val(input_ID), path("*.aln.masked.fasta"), emit: masked_aln
+    path "*"
 
     script:
     """
@@ -29,13 +30,15 @@ process maskAln {
 
 process iqtree {
     conda "${HOME}/miniconda3/envs/raccoon"
-    publishDir "results/${input_ID}/tree/"
+    publishDir "results/${input_ID}/tree/", pattern: "*"
 
     input:
     tuple val(input_ID), path(aln_file)
 
     output:
-    tuple val(input_ID), path("*.treefile")
+    tuple val(input_ID), path("*.treefile"), emit: treefile
+    path "*.fasta.state", emit: asr_file, optional: true
+    path "*"
 
     script:
     """
@@ -45,13 +48,14 @@ process iqtree {
 
 process treePrune {
     conda "${HOME}/miniconda3/envs/raccoon"
-    publishDir "results/${input_ID}/pruned_tree/"
+    publishDir "results/${input_ID}/pruned_tree/", pattern: "*"
 
     input:
     tuple val(input_ID), path(treefile)
 
     output:
-    tuple val(input_ID), path("*.pruned.tree")
+    tuple val(input_ID), path("*.pruned.tree"), emit: pruned_tree
+    path "*"
 
     script:
     """
@@ -65,12 +69,14 @@ process treeQC {
 
     input:
     tuple val(input_ID), path(pruned_treefile)
+    tuple val(input_ID), path(masked_aln)
+    path asr_file
 
     output:
-    tuple val(input_ID), path("*.pruned.tree")
+    path "*"
 
     script:
     """
-    raccoon tree-qc --phylogeny '${pruned_treefile}' --asr-state examples/mev/masked/mev_sample.aln.masked.fasta.state --alignment examples/mev/masked/mev_sample.aln.masked.fasta -d examples/mev/tree-qc/
+    raccoon tree-qc --phylogeny '${pruned_treefile}' --alignment ${masked_aln} --asr-state ${asr_file}
     """
 }

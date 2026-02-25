@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 include { seqQC; mafftAlign; alnQC } from './modules/SequenceQC.nf'
-include { maskAln; iqtree; treePrune } from './modules/MaskingAndTreeQC.nf'
+include { maskAln; iqtree; treePrune; treeQC } from './modules/MaskingAndTreeQC.nf'
 
 workflow seq_qc {
     main:
@@ -11,9 +11,9 @@ workflow seq_qc {
     inMinLen_ch = Channel.value("${params.min_length}")
     inMaxN_ch = Channel.value("${params.max_n_content}")
     // Call the functions
-    seqQC_output = seqQC(inFasta_ch,inMetadata_ch,inMinLen_ch,inMaxN_ch)
-    mafftAlign_output = mafftAlign(seqQC_output)
-    alnQC(mafftAlign_output)
+    seqQC(inFasta_ch,inMetadata_ch,inMinLen_ch,inMaxN_ch)
+    mafftAlign(seqQC.out.seq_qc_fasta)
+    alnQC(mafftAlign.out.aln)
     
     emit:
     aln_tuple = mafftAlign.out.aln
@@ -29,9 +29,11 @@ workflow mask_and_tree_qc {
     mask_in
 
     main:
-    maskAln_output = maskAln(aln_in,mask_in)
-    iqtree_output = iqtree(maskAln_output)
-    treePrune(iqtree_output)
+    maskAln(aln_in, mask_in)
+    iqtree(maskAln.out.masked_aln)
+    treePrune(iqtree.out.treefile)
+    treeQC(treePrune.out.pruned_tree, maskAln.out.masked_aln, iqtree.out.asr_file)
+
 
 }
 
