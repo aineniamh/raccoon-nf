@@ -34,7 +34,7 @@
           "default": 0,
           "help_text": ""
         },
-        "max": {
+        "max_n_content": {
           "type": "integer",
           "format": "value",
           "title": "Maximum read length",
