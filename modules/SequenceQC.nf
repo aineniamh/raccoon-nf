@@ -2,7 +2,7 @@ process seqQC {
     container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "results/${input_fasta.baseName}/seq-qc/"
+    publishDir "output/${input_fasta.baseName}/seq-qc/", mode: "copy"
 
     input:
     path input_fasta
@@ -24,7 +24,7 @@ process mafftAlign {
     container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "results/${input_ID}/mafft/", pattern: "*.aln.fasta"
+    publishDir "output/${input_ID}/mafft/", pattern: "*.aln.fasta", mode: "copy"
 
     input:
     tuple val(input_ID), path(qc_fasta)
@@ -42,7 +42,7 @@ process alnQC {
     container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "results/${input_ID}/aln-qc/"
+    publishDir "output/${input_ID}/aln-qc/", mode: "copy"
     
     input:
     tuple val(input_ID), path(aln_fasta)

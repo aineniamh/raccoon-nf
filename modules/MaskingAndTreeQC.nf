@@ -2,7 +2,7 @@ process maskAln {
     container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "results/${input_ID}/mask_alignment/"
+    publishDir "output/${input_ID}/mask_alignment/", mode: "copy"
 
     input:
     tuple val(input_ID), path(aln_file)
@@ -22,7 +22,7 @@ process iqtree {
     container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "results/${input_ID}/tree/", pattern: "*"
+    publishDir "output/${input_ID}/tree/", pattern: "*", mode: "copy"
 
     input:
     tuple val(input_ID), path(aln_file)
@@ -42,7 +42,7 @@ process treePrune {
     container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "results/${input_ID}/pruned_tree/", pattern: "*"
+    publishDir "output/${input_ID}/pruned_tree/", pattern: "*", mode: "copy"
 
     input:
     tuple val(input_ID), path(treefile)
@@ -58,10 +58,10 @@ process treePrune {
 }
 
 process treeQC {
-    container "${params.container}@${params.container_sha}"
+    container "${params.container}@${params.container_sha}", mode: "copy"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "results/${input_ID}/tree-qc/"
+    publishDir "output/${input_ID}/tree-qc/"
 
     input:
     tuple val(input_ID), path(pruned_treefile)
