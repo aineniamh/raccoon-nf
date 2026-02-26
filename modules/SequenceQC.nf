@@ -19,7 +19,7 @@ process seqQC {
     script:
     // This bit of logic checks if the input is a single fasta or a directory of fastas
     print input_fasta
-    if ( input_fasta.extension.equals("fa*") ) {
+    if ( input_fasta.extension.equals("fasta") ) {
         input_file = input_fasta;
     }else {
         input_list = file("${input_fasta}/*.fa*")
