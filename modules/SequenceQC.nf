@@ -15,8 +15,15 @@ process seqQC {
     path "*"
 
     script:
+    // This bit of logic checks if the input is a single fasta or a directory of fastas
+    if ( input_fasta.extension.equals("fa*") ) {
+        input_file = input_fasta;
+    }else {
+        input_list = file("${input_fasta}/*.fa*")
+        input_file = "${input_list.join(' ')}"
+    } 
     """
-    raccoon seq-qc ${input_fasta} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata} --metadata-id-field accessionVersion --metadata-location-field geoLocCountry --metadata-date-field sampleCollectionDate --min-length ${min_length} --max-n-content ${max_n}
+    raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata} --metadata-id-field accessionVersion --metadata-location-field geoLocCountry --metadata-date-field sampleCollectionDate --min-length ${min_length} --max-n-content ${max_n}
     """
 }
 

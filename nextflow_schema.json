@@ -28,7 +28,6 @@
         },
         "min_length": {
           "type": "integer",
-          "format": "value",
           "title": "Minimum sequence length to keep",
           "description": "Filter out sequences that are shorter than this value",
           "default": 0,
@@ -36,10 +35,9 @@
         },
         "max_n_content": {
           "type": "integer",
-          "format": "value",
           "title": "Maximum read length",
           "description": "Maximum N content proportion to keep (e.g. 0.1)",
-          "default": 0,
+          "default": 0.2,
           "help_text": ""
         },
         "medaka_model": {
