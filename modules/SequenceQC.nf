@@ -22,7 +22,7 @@ process seqQC {
     if ( input_fasta.extension.equals("fasta") ) {
         input_file = input_fasta;
     }else {
-        input_list = file("${input_fasta}/*.fa*")
+        input_list = file("${input_fasta}/*.fa*", checkIfExists: true)
         input_file = "${input_list.join(' ')}"
     }
     print input_file
