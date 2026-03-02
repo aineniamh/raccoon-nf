@@ -172,6 +172,64 @@
         }
       }
     },
+    "iqtree_prune": {
+      "title": "IQTREE",
+      "type": "object",
+      "fa_icon": "fas fa-wrench",
+      "description": "Change settings for IQTREE.",
+      "properties": {
+        "outgroup": {
+          "type": "string",
+          "title": "Outgroup",
+          "description": "Sequence header for the outgroup to be used in tree building (default: no outgroup)",
+          "help_text": "This needs to match the sequence header of the outgroup after any header manipulation by seq-qc. For example if there was no metadata for the outgroup this may look like 'IDXXXX||'. This will also be used to prune the outgroup from the resulting tree."          
+        }
+      }
+    },
+    "tree_qc": {
+      "title": "Tree QC Options",
+      "type": "object",
+      "fa_icon": "fas fa-wrench",
+      "description": "Change settings for the Raccoon tree-qc module.",
+      "properties": {
+        "long_branch_sd": {
+          "type": "integer",
+          "title": "Long branch Standard deviation",
+          "description": "Standard deviation threshold for long branch flagging (default: 3.0).",
+          "help_text": ""
+        },
+        "run_adar": {
+          "type": "boolean",
+          "title": "Run ADAR",
+          "description": "Run ADAR phylo checks.",
+          "help_text": "Choose to mask clustered snps from resulting alignment or not."
+        },
+        "adar_window": {
+          "type": "integer",
+          "title": "ADAR window size",
+          "description": "Max distance (bp) for ADAR cluster window (default: 300).",
+          "help_text": ""
+        },
+        "adar_min_count": {
+          "type": "integer",
+          "title": "Minimun ADAR sites count",
+          "description": "Min ADAR sites in window to flag a branch (default: 3).",
+          "help_text": ""
+        },
+        "run_apobec": {
+          "type": "boolean",
+          "title": "Run APOBEC",
+          "description": "Run APOBEC phylo checks.",
+          "help_text": ""
+        },
+        "fig_height": {
+          "type": "number",
+          "title": "Figure height",
+          "description": "Adjust the output figure height.",
+          "help_text": ""
+        }
+      }
+    },
     "output_options": {
       "title": "Output Options",
       "type": "object",

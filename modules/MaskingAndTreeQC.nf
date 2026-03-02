@@ -33,8 +33,14 @@ process iqtree {
     path "*"
 
     script:
+    // Parse any extra flags
+    extra = ""
+    extra += " -m ${params.tree_model}"
+    if (params.outgroup) {
+        extra += " -o '${params.outgroup}'"
+    }
     """
-    iqtree -s ${aln_file} -m HKY -czb -blmin 0.00000001 -asr -o 'PP_003MAAS.2||2019'
+    iqtree -s ${aln_file} -czb -blmin 0.00000001 -asr ${extra}
     """
 }
 
@@ -52,8 +58,13 @@ process treePrune {
     path "*"
 
     script:
+    // Parse any extra flags
+    extra = ""
+    if (params.outgroup) {
+        extra += " -t '${params.outgroup}'"
+    }
     """
-    jclusterfunk prune -i "${treefile}" -t 'PP_003MAAS.2||2019' -o '${input_ID}.pruned.tree'
+    jclusterfunk prune -i "${treefile}" -o '${input_ID}.pruned.tree' ${extra}
     """
 }
 
@@ -72,7 +83,28 @@ process treeQC {
     path "*"
 
     script:
+    // Parse any extra flags
+    extra = ""
+    if (params.long_branch_sd) {
+        extra += " --long-branch-sd ${params.long_branch_sd}"
+    }
+    if (params.run_adar == true) {
+        extra += " --run-adar"
+    }
+    if (params.adar_window) {
+        extra += " --adar-window ${params.adar_window}"
+    }
+    if (params.run_min_count) {
+        extra += " --adar-min-count ${params.adar_min_count}"
+    }
+    if (params.run_apobec == true) {
+        extra += " --run-apobec"
+    }
+    if (params.fig_height) {
+        extra += " --height ${params.fig_height}"
+    }
+    
     """
-    raccoon tree-qc --phylogeny '${pruned_treefile}' --alignment ${masked_aln} --asr-state ${asr_file}
+    raccoon tree-qc --phylogeny '${pruned_treefile}' --alignment ${masked_aln} --asr-state ${asr_file} ${extra}
     """
 }

@@ -40,7 +40,7 @@ process seqQC {
     // Parse any extra flags
     extra = ""
     if (params.metadata_delimiter) {
-        extra += " --metadata-delimiter ${params.metadata_delimiter}"
+        extra += " --metadata-delimiter '${params.metadata_delimiter}'"
     }
     if (params.metadata_id_field) {
         extra += " --metadata-id-field ${params.metadata_id_field}"
@@ -52,7 +52,7 @@ process seqQC {
         extra += " --metadata-date-field ${params.metadata_date_field}"
     }
     if (params.header_separator) {
-        extra += " --header-separator ${params.header_separator}"
+        extra += " --header-separator '${params.header_separator}'"
     }
     if (params.id_delimiter) {
         extra += " --id_delimiter '${params.id_delimiter}'"
