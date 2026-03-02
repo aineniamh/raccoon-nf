@@ -10,7 +10,7 @@
       "title": "Input Options",
       "type": "object",
       "fa_icon": "fas fa-terminal",
-      "description": "Define where the pipeline should find input data and save output data.",
+      "description": "Define where the pipeline should find input data and change some frequently used options.",
       "properties": {
         "fasta": {
           "type": "string",
@@ -69,37 +69,37 @@
         "metadata_delimiter": {
           "type": "string",
           "title": "Metadata Delimiter",
-          "description": "Metadata file delimiter (default: ,) will auto-detect .tsv/.tab",
+          "description": "Metadata file delimiter (default: ,). Will auto-detect and parse .tsv/.tab files",
           "help_text": "Explicitly choose what delimiter to use when parsing the metadata files."
         },
         "metadata_id_field": {
           "type": "string",
           "title": "Metadata ID field",
-          "description": "Metadata id column (default: id)",
+          "description": "Metadata id column (default: id).",
           "help_text": "Provide the header of the ID column in the provided metadata file."
         },
         "metadata_location_field": {
           "type": "string",
           "title": "Metadata Location field",
-          "description": "Metadata location column (default: location)",
+          "description": "Metadata location column (default: location).",
           "help_text": "Provide the header of the location column in the provided metadata file."
         },
         "metadata_date_field": {
           "type": "string",
           "title": "Metadata Date field",
-          "description": "Metadata Date column (default: date)",
+          "description": "Metadata Date column (default: date).",
           "help_text": "Provide the header of the ID column in the provided metadata file."
         },
         "header_separator": {
           "type": "string",
           "title": "Header separator",
-          "description": "Choose the header separator (default: |)",
+          "description": "Choose the header separator (default: |).",
           "help_text": "The header separator is the character that separates each element in the newly generated headers."
         },
         "id_delimiter": {
           "type": "string",
           "title": "ID delimiter",
-          "description": "Choose the ID delimiter (default: |)",
+          "description": "Choose the ID delimiter (default: |).",
           "help_text": "The ID delimiter is the character that separates each element in the headers provided in your fasta files."
         },
         "id_field": {

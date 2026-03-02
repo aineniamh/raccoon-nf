@@ -8,7 +8,6 @@ process seqQC {
 
     input:
     path input_fasta
-    path input_metadata
     val min_length
     val max_n
 
@@ -27,10 +26,18 @@ process seqQC {
 	matching_files =  input_dir_files.findAll { a -> fasta_extensions.any { a.contains(it) } }
 	input_file = matching_files.collect {"$input_fasta/$it"}.join(" ")
     }
+    
+    // Parse any extra flags
+    extra = ""
+    if (params.metadata) {
+        if ( params.metadata.extension.equals("csv") || input_fasta.extension.equals("tsv")) 
+            extra += " --metadata ${params.metadata}"
+    }
+
     """
     echo "Input: ${input_fasta}"
     echo "Found the following files: ${input_file}"
-    raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata} --metadata-id-field accessionVersion --metadata-location-field geoLocCountry --metadata-date-field sampleCollectionDate --min-length ${min_length} --max-n-content ${max_n}
+    raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --min-length ${min_length} --max-n-content ${max_n} ${extra}
     """
 }
 
