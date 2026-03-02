@@ -39,9 +39,30 @@ process seqQC {
     
     // Parse any extra flags
     extra = ""
+    if (params.metadata_delimiter) {
+        extra += " --metadata-delimiter ${params.metadata_delimiter}"
+    }
+    if (params.metadata_id_field) {
+        extra += " --metadata-id-field ${params.metadata_id_field}"
+    }
+    if (params.metadata_location_field) {
+        extra += " --metadata-location-field ${params.metadata_location_field}"
+    }
+    if (params.metadata_date_field) {
+        extra += " --metadata-date-field ${params.metadata_date_field}"
+    }
+    if (params.header_separator) {
+        extra += " --header-separator ${params.header_separator}"
+    }
+    if (params.id_delimiter) {
+        extra += " --id_delimiter '${params.id_delimiter}'"
+    }
+    if (params.id_field) {
+        extra += " --id-field ${params.id_field}"
+    }
 
     """
-    echo -e "\nInput --fasta: ${input_fasta}\nFound the following file(s): ${input_file}\n\nInput --metadata: ${input_metadata}\nFound the following metadata file(s): ${input_metadata_file}"
+    echo -e "\nInput --fasta: ${input_fasta}\nFound the following fasta file(s): ${input_file}\n\nInput --metadata: ${input_metadata}\nFound the following metadata file(s): ${input_metadata_file}"
     raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata_file} --min-length ${min_length} --max-n-content ${max_n} ${extra}
     """
 }

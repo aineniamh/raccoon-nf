@@ -111,6 +111,54 @@
         }
       }
     },
+    "aln_qc": {
+      "title": "Alignment QC Options",
+      "type": "object",
+      "fa_icon": "fas fa-wrench",
+      "description": "Change settings for the Raccoon aln-qc module.",
+      "properties": {
+        "cluster_window": {
+          "type": "integer",
+          "title": "Cluster window size",
+          "description": "Window size for clustered SNP detection (default: 10bp).",
+          "help_text": ""
+        },
+        "cluster_count": {
+          "type": "integer",
+          "title": "Cluster count",
+          "description": "Min SNPs in window to flag as clustered (default: 3).",
+          "help_text": ""
+        },
+        "mask_clustered": {
+          "type": "boolean",
+          "title": "Mask clustered",
+          "default": true,
+          "description": "Mask clustered SNPs (default: True).",
+          "help_text": "Choose to mask clustered snps from resulting alignment or not."
+        },
+        "mask_n_adjacent": {
+          "type": "boolean",
+          "title": "Mask N adjacent",
+          "default": true,
+          "description": "Mask SNPs adjacent to Ns (default: True).",
+          "help_text": "Mask any SNPs next to Ns in your resulting alignment."
+        },
+        "mask_gap_adjacent": {
+          "type": "boolean",
+          "title": "Mask gap adjacent",
+          "default": true, 
+          "description": "Mask SNPs adjacent to gaps (default: True).",
+          "help_text": "Mask any SNPs next to gaps (-) in your resulting alignment."
+        },
+        "mask_frame_break": {
+          "type": "boolean",
+          "title": "Mask frame break",
+          "default": true,
+          "description": "Mask frame-breaking indels (default: True).",
+          "help_text": "If any insertions or deletions lead to reading frame breaks then they will be masked. Requires a genbank file."
+        }
+      }
+    },
     "output_options": {
       "title": "Output Options",
       "type": "object",
