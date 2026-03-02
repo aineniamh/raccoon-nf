@@ -117,6 +117,20 @@
       "fa_icon": "fas fa-wrench",
       "description": "Change settings for the Raccoon aln-qc module.",
       "properties": {
+        "alignment_only": {
+          "type": "boolean",
+          "title": "Only run alignment steps",
+          "default": false,
+          "description": "Stop workflow after alignment step. (default: False).",
+          "help_text": "If selected, the seq-qc step, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags below but will not be applied to your alignment."
+        },
+        "skip_mask": {
+          "type": "boolean",
+          "title": "Skip masking step",
+          "default": false,
+          "description": "Skip all masking of the alignment (default: False).",
+          "help_text": "If you choose this no masking of your alignment will happen, but a mask file will still be produced as per the flags below so you can see what would be masked."
+        },
         "cluster_window": {
           "type": "integer",
           "title": "Cluster window size",

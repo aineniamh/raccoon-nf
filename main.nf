@@ -20,9 +20,7 @@ workflow seq_qc {
     mask_tuple = alnQC.out.mask
 }
 
-
-
-workflow mask_and_tree_qc {
+workflow mask_aln {
     // Define the input channels
     take:
     aln_in
@@ -30,14 +28,37 @@ workflow mask_and_tree_qc {
 
     main:
     maskAln(aln_in, mask_in)
-    iqtree(maskAln.out.masked_aln)
+
+    emit:
+    maskAln_tuple = maskAln.out.masked_aln
+
+}
+
+workflow tree_qc {
+    // Define the input channels
+    take:
+    aln_in
+
+    main:
+    iqtree(aln_in)
     treePrune(iqtree.out.treefile)
-    treeQC(treePrune.out.pruned_tree, maskAln.out.masked_aln, iqtree.out.asr_file)
+    treeQC(treePrune.out.pruned_tree, aln_in, iqtree.out.asr_file)
 
 
 }
 
 workflow {
-    seq_qc()
-    mask_and_tree_qc(seq_qc.out.aln_tuple,seq_qc.out.mask_tuple)
+    // conditional statement here to stop after alignment
+    if (params.alignment_only == true) {
+        seq_qc()
+    } else {
+        seq_qc()
+        // conditional statement here to choose to use the generated mask or not
+        if (params.skip_mask == false) {
+            mask_aln(seq_qc.out.aln_tuple, seq_qc.out.mask_tuple)
+            tree_qc(mask_aln.out.maskAln_tuple)
+        } else if (params.skip_mask == true) {
+            tree_qc(seq_qc.out.aln_tuple)
+        }
+    }
 }
