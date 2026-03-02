@@ -42,7 +42,6 @@
         },
         "tree_model": {
           "type": "string",
-          "format": "value",
           "title": "IQ-TREE substitution model",
           "description": "Choose which substitution model IQ-TREE will use to reconstruct a phylogenetic tree.",
           "help_text": "The default, TEST, will make iqtree run the model selection step and automatically choose its preferred model. The 'MFP' option will run the model selection step with the addition of FreeRate models",
@@ -122,7 +121,7 @@
           "title": "Only run alignment steps",
           "default": false,
           "description": "Stop workflow after alignment step. (default: False).",
-          "help_text": "If selected, the seq-qc step, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags below but will not be applied to your alignment."
+          "help_text": "If selected, the seq-qc, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags below but will not be applied to your alignment."
         },
         "skip_mask": {
           "type": "boolean",
