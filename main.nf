@@ -43,8 +43,13 @@ workflow tree_qc {
 
     main:
     iqtree(aln_in)
-    treePrune(iqtree.out.treefile)
-    treeQC(treePrune.out.pruned_tree, aln_in, iqtree.out.asr_file)
+    if (params.outgroup) {
+        treePrune(iqtree.out.treefile)
+        treeQC(treePrune.out.pruned_tree, aln_in, iqtree.out.asr_file)
+    } else {
+        treeQC(iqtree.out.treefile, aln_in, iqtree.out.asr_file)
+    }
+    
 
 
 }
@@ -52,6 +57,7 @@ workflow tree_qc {
 workflow {
     
     // Define the workflow inputs
+
     // check if params.fasta is a directory or a file.
     input_fasta = file("${params.fasta}")
     if ( input_fasta.extension.equals("fasta") || input_fasta.extension.equals("fa")) {
@@ -82,8 +88,7 @@ workflow {
     inMinLen_ch = Channel.value("${params.min_length}")
     inMaxN_ch = Channel.value("${params.max_n_content}")
 
-    //inMetadata_ch = Channel.fromPath("${params.metadata}")
-
+    // Run the workflow
     // Choose to stop after alignment
     if (params.alignment_only == true) {
         seq_qc(inFasta_ch,inMetadata_ch,inMinLen_ch,inMaxN_ch)

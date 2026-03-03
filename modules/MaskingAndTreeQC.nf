@@ -75,7 +75,7 @@ process treeQC {
     publishDir "output/${input_ID}/tree-qc/", mode: "copy"
 
     input:
-    tuple val(input_ID), path(pruned_treefile)
+    tuple val(input_ID), path(treefile)
     tuple val(input_ID), path(masked_aln)
     path asr_file
 
@@ -105,6 +105,6 @@ process treeQC {
     }
     
     """
-    raccoon tree-qc --phylogeny '${pruned_treefile}' --alignment ${masked_aln} --asr-state ${asr_file} ${extra}
+    raccoon tree-qc --phylogeny '${treefile}' --alignment ${masked_aln} --asr-state ${asr_file} ${extra}
     """
 }

@@ -84,6 +84,9 @@ process alnQC {
     script:
     // Parse any extra flags
     extra = ""
+    // Standardise n content thresholds between aln-qc and seq-qc
+    extra += " --n-threshold ${params.max_n_content}"
+    
     if (params.cluster_window) {
         extra += " --cluster-window ${params.cluster_window}"
     }
