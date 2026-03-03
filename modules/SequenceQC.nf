@@ -7,26 +7,17 @@ process seqQC {
     debug true
 
     input:
-    path input_fasta
+    tuple val(sample_name), path(input_fasta)
     path input_metadata
     val min_length
     val max_n
 
     output:
-    tuple val(input_fasta.baseName), path("*.seq_qc.fasta"), emit: seq_qc_fasta
+    tuple val(sample_name), path("*.seq_qc.fasta"), emit: seq_qc_fasta
     path "*"
 
     script:
-    // This bit of logic checks if the input is a single fasta or a directory of fastas
-    if ( input_fasta.extension.equals("fasta") || input_fasta.extension.equals("fa")) {
-        input_file = input_fasta;
-    } else {
-        input_path = file(input_fasta.toRealPath())
-	    input_dir_files = input_path.list()
-        fasta_extensions = [".fasta", ".fa"]
-	    matching_files =  input_dir_files.findAll { a -> fasta_extensions.any { a.contains(it) } }
-	    input_file = matching_files.collect {"$input_fasta/$it"}.join(" ")
-    }
+
     if ( input_metadata.extension.equals("csv") || input_metadata.extension.equals("tsv")) { 
         input_metadata_file =  input_metadata
     } else {
@@ -37,6 +28,7 @@ process seqQC {
 	    input_metadata_file = matching_files.collect {"$input_metadata/$it"}.join(" ")
     }
     
+    input_file = input_fasta
     // Parse any extra flags
     extra = ""
     if (params.metadata_delimiter) {
@@ -63,7 +55,7 @@ process seqQC {
 
     """
     echo -e "\nInput --fasta: ${input_fasta}\nFound the following fasta file(s): ${input_file}\n\nInput --metadata: ${input_metadata}\nFound the following metadata file(s): ${input_metadata_file}"
-    raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata_file} --min-length ${min_length} --max-n-content ${max_n} ${extra}
+    raccoon seq-qc ${input_file} -o ${sample_name}.seq_qc.fasta --metadata ${input_metadata_file} --min-length ${min_length} --max-n-content ${max_n} ${extra}
     """
 }
 
