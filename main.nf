@@ -47,7 +47,7 @@ workflow tree_qc {
         treePrune(iqtree.out.treefile)
         treeQC(treePrune.out.pruned_tree, aln_in, iqtree.out.asr_file)
     } else {
-        treeQC(iqtree.out.treefile, aln_in, iqtree.out.asr_file)
+        treeQC(iqtree.out.treefile, aln_in, params.asr_file)
     }
     
 
@@ -69,6 +69,7 @@ workflow {
         input_files = matching_files.collect {"$input_fasta/$it"}
         inFasta_ch = Channel.fromPath(input_files).collect().map { [input_fasta.baseName, it] }
     }
+
     // Metadata is optional, and can also be either a file or dir
     // Will deal with optional input as per https://nextflow-io.github.io/patterns/optional-input/
     input_metadata = file("${params.metadata}")

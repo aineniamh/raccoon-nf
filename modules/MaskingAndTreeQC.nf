@@ -37,10 +37,10 @@ process iqtree {
     extra = ""
     extra += " -m ${params.tree_model}"
     if (params.outgroup) {
-        extra += " -o '${params.outgroup}'"
+        extra += " -asr -o '${params.outgroup}'"
     }
     """
-    iqtree -s ${aln_file} -czb -blmin 0.00000001 -asr ${extra}
+    iqtree -s ${aln_file} -czb -blmin 0.00000001 ${extra}
     """
 }
 
@@ -85,6 +85,10 @@ process treeQC {
     script:
     // Parse any extra flags
     extra = ""
+
+    if (asr_file.name != 'NO_FILE') {
+        extra += " --asr-state ${asr_file}"
+    }
     if (params.long_branch_sd) {
         extra += " --long-branch-sd ${params.long_branch_sd}"
     }
@@ -94,7 +98,7 @@ process treeQC {
     if (params.adar_window) {
         extra += " --adar-window ${params.adar_window}"
     }
-    if (params.run_min_count) {
+    if (params.adar_min_count) {
         extra += " --adar-min-count ${params.adar_min_count}"
     }
     if (params.run_apobec == true) {
@@ -105,6 +109,6 @@ process treeQC {
     }
     
     """
-    raccoon tree-qc --phylogeny '${treefile}' --alignment ${masked_aln} --asr-state ${asr_file} ${extra}
+    raccoon tree-qc --phylogeny '${treefile}' --alignment ${masked_aln} ${extra}
     """
 }
