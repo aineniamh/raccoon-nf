@@ -54,8 +54,7 @@
       "allOf": [
         {
           "required": [
-            "fasta",
-            "metadata"
+            "fasta"
           ]
         }
       ]

@@ -51,11 +51,8 @@ workflow tree_qc {
 
 workflow {
     
-    inMetadata_ch = Channel.fromPath("${params.metadata}")
-    inMinLen_ch = Channel.value("${params.min_length}")
-    inMaxN_ch = Channel.value("${params.max_n_content}")
-
-    // check inFasta_ch is a directory or a file.
+    // Define the workflow inputs
+    // check if params.fasta is a directory or a file.
     input_fasta = file("${params.fasta}")
     if ( input_fasta.extension.equals("fasta") || input_fasta.extension.equals("fa")) {
         inFasta_ch = Channel.fromPath(input_fasta).map { [it.baseName, it] }
@@ -66,13 +63,33 @@ workflow {
         input_files = matching_files.collect {"$input_fasta/$it"}
         inFasta_ch = Channel.fromPath(input_files).collect().map { [input_fasta.baseName, it] }
     }
+    // Metadata is optional, and can also be either a file or dir
+    // Will deal with optional input as per https://nextflow-io.github.io/patterns/optional-input/
+    input_metadata = file("${params.metadata}")
+    if ( input_metadata.extension.equals("csv") || input_metadata.extension.equals("tsv") || input_metadata.extension.equals("tab")) { 
+        inMetadata_ch = Channel.fromPath("${input_metadata}")
+    } else if (file("${params.metadata}").name != 'NO_FILE') {
+        input_dir_files = file("${params.metadata}").list()
+        metadata_extensions = [".csv", ".tsv", ".tab"]
+	    matching_files =  input_dir_files.findAll { a -> metadata_extensions.any { a.contains(it) } }
+	    input_metadata_files = matching_files.collect {"$input_metadata/$it"}
+        inMetadata_ch = Channel.fromPath(input_metadata_files).collect()
+    } else {
+        print ("No Metadata provided")
+        inMetadata_ch = Channel.fromPath("${input_metadata}")
+    }
+    // Extra inputs
+    inMinLen_ch = Channel.value("${params.min_length}")
+    inMaxN_ch = Channel.value("${params.max_n_content}")
 
-    // conditional statement here to stop after alignment
+    //inMetadata_ch = Channel.fromPath("${params.metadata}")
+
+    // Choose to stop after alignment
     if (params.alignment_only == true) {
         seq_qc(inFasta_ch,inMetadata_ch,inMinLen_ch,inMaxN_ch)
     } else {
         seq_qc(inFasta_ch,inMetadata_ch,inMinLen_ch,inMaxN_ch)
-        // conditional statement here to choose to use the generated mask or not
+        // Choose to use the generated mask or not
         if (params.skip_mask == false) {
             mask_aln(seq_qc.out.aln_tuple, seq_qc.out.mask_tuple)
             tree_qc(mask_aln.out.maskAln_tuple)

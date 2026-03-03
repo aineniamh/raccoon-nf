@@ -17,20 +17,11 @@ process seqQC {
     path "*"
 
     script:
-
-    if ( input_metadata.extension.equals("csv") || input_metadata.extension.equals("tsv")) { 
-        input_metadata_file =  input_metadata
-    } else {
-        input_path = file(input_metadata.toRealPath())
-	    input_dir_files = input_path.list()
-        metadata_extensions = [".csv", ".tsv",".tab"]
-	    matching_files =  input_dir_files.findAll { a -> metadata_extensions.any { a.contains(it) } }
-	    input_metadata_file = matching_files.collect {"$input_metadata/$it"}.join(" ")
-    }
-    
-    input_file = input_fasta
     // Parse any extra flags
     extra = ""
+    if (input_metadata.name != 'NO_FILE') {
+        extra += " --metadata ${input_metadata}"
+    }
     if (params.metadata_delimiter) {
         extra += " --metadata-delimiter '${params.metadata_delimiter}'"
     }
@@ -54,8 +45,8 @@ process seqQC {
     }
 
     """
-    echo -e "\nInput --fasta: ${input_fasta}\nFound the following fasta file(s): ${input_file}\n\nInput --metadata: ${input_metadata}\nFound the following metadata file(s): ${input_metadata_file}"
-    raccoon seq-qc ${input_file} -o ${sample_name}.seq_qc.fasta --metadata ${input_metadata_file} --min-length ${min_length} --max-n-content ${max_n} ${extra}
+    echo -e "\nFound the following fasta file(s): ${input_fasta}\n\nFound the following metadata file(s): ${input_metadata}"
+    raccoon seq-qc ${input_fasta} -o ${sample_name}.seq_qc.fasta --min-length ${min_length} --max-n-content ${max_n} ${extra}
     """
 }
 
