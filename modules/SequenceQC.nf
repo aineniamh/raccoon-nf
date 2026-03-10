@@ -34,14 +34,17 @@ process seqQC {
     if (params.metadata_date_field) {
         extra += " --metadata-date-field ${params.metadata_date_field}"
     }
+    if (params.seq_id_delimiter) {
+        extra += " --seq_id_delimiter '${params.id_delimiter}'"
+    }
+    if (params.seq_id_field) {
+        extra += " --id-field ${params.id_field}"
+    }
     if (params.header_separator) {
         extra += " --header-separator '${params.header_separator}'"
     }
-    if (params.id_delimiter) {
-        extra += " --id_delimiter '${params.id_delimiter}'"
-    }
-    if (params.id_field) {
-        extra += " --id-field ${params.id_field}"
+    if (params.header_fields) {
+        extra += " --header-fields '${params.header_fields}'"
     }
 
     """

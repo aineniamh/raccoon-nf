@@ -103,23 +103,29 @@
           "description": "Metadata Date column (default: date).",
           "help_text": "Provide the header of the ID column in the provided metadata file."
         },
-        "header_separator": {
-          "type": "string",
-          "title": "Header separator",
-          "description": "Choose the header separator (default: |).",
-          "help_text": "The header separator is the character that separates each element in the newly generated headers."
-        },
-        "id_delimiter": {
+        "seq_id_delimiter": {
           "type": "string",
           "title": "ID delimiter",
           "description": "Choose the ID delimiter (default: |).",
           "help_text": "The ID delimiter is the character that separates each element in the headers provided in your fasta files."
         },
-        "id_field": {
+        "seq_id_field_index": {
           "type": "integer",
           "title": "ID field",
           "description": "Choose the 0-based index position of the ID in your input headers (default: 0)",
           "help_text": "If the header is split using the delimiter from 'ID delimiter' above, choose the 0-based position of the sequence ID that can be used to match the Metadata ID."
+        },
+        "header_fields": {
+          "type": "string",
+          "title": "Header fields",
+          "description": "Template for constructing harmonised sequence headers ( e.g. {id}|{location}|{date} ).",
+          "help_text": "Use this to generate new headers based on the columns in your metadata files. Surround each column title with {} and place your delimiter of choice between each entry. Overrides header separator option."
+        },
+        "header_separator": {
+          "type": "string",
+          "title": "Header separator",
+          "description": "Choose the header separator (default: |).",
+          "help_text": "The header separator is the character that separates each element in the newly generated headers."
         }
       }
     },
