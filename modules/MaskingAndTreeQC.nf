@@ -105,13 +105,13 @@ process treeQC {
         extra += " --run-apobec"
     }
     if (params.tip_fields) {
-        extra += " --tip-fields ${params.tip_fields}"
+        extra += " --tip-fields '${params.tip_fields}'"
     } 
     if (params.tip_field_delimiter) {
-    extra += " --tip-field-delimiter ${params.tip_field_delimiter}"
+    extra += " --tip-field-delimiter '${params.tip_field_delimiter}'"
     }
     if (params.tip_date_field) {
-    extra += " --tip-date-field ${params.tip_date_field}"
+    extra += " --tip-date-field '${params.tip_date_field}'"
     }
     if (params.midpoint_root == true) {
     extra += " --midpoint-root"
