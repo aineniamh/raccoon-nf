@@ -91,7 +91,8 @@
         "midpoint_root": {
           "type": "boolean",
           "title": "Midpoint root",
-          "description": "Midpoint root the resulting tree for report visualisation.",
+          "default": true,
+          "description": "Midpoint root the resulting tree for report visualisation (Default: True if no outgroup provided).",
           "help_text": "This is only applied when an outgroup has NOT been provided, as otherwise Ancestral State Reconstruction is run which requires trees to be outgroup rooted."
         },
         "threads": {
